@@ -1,0 +1,3 @@
+interface IClassName {
+  className?: string;
+}
