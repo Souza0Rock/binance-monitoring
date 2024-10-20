@@ -1,6 +1,7 @@
+import { webSocket } from "rxjs/webSocket";
 import { connectApi } from "..";
 
-export const fetchAllSymbols = async () => {
+export const fetchAllSymbols = async (): Promise<string[]> => {
   try {
     const {
       data: { symbols },
@@ -14,4 +15,14 @@ export const fetchAllSymbols = async () => {
   } catch (error) {
     return [];
   }
+};
+
+export const fetchSocketSymbolsSelected = async () => {
+  const socketBaseUrl = process.env.NEXT_PUBLIC_API_BINANCE_SOCKET ?? "";
+
+
+  
+  const connectSocket = webSocket(socketBaseUrl);
+
+
 };
