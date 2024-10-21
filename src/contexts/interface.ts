@@ -1,12 +1,17 @@
 import { Dispatch, SetStateAction } from "react";
 
 export interface ISymbolContextValue {
-  stashSymbolsSelected: string[];
-  setStashSymbolsSelected: Dispatch<SetStateAction<string[]>>;
-  loadingAddSymbols: boolean;
-  toogleLoadingAddSymbols: () => void;
+  stashSymbolsSelected: TSymbolNotData;
+  setStashSymbolsSelected: Dispatch<SetStateAction<TSymbolNotData>>;
+  symbolsSelected: TSymbolNotData;
+  setSymbolsSelected: Dispatch<SetStateAction<TSymbolNotData>>;
   symbolsSelectedData: ISymbolData[];
   setSymbolsSelectedData: Dispatch<SetStateAction<ISymbolData[]>>;
+  loadingAddSymbols: boolean;
+  enableLoadingAddSymbols: () => void;
+  disableLoadingAddSymbols: () => void;
+  loadingForClearTable: boolean;
+  loadingGetAllSymbolsSelected: boolean;
 }
 
 export interface ISymbolData {
@@ -16,3 +21,5 @@ export interface ISymbolData {
   askPrice: string;
   priceChangePercent: string;
 }
+
+export type TSymbolNotData = string[];

@@ -4,10 +4,12 @@ import { ILoadingSpinnerProps } from "./types";
 export const LoadingSpinner: React.FC<ILoadingSpinnerProps> = ({
   size = 48,
   color = "#f3fcff",
+  className,
 }) => {
   return (
     <span
-      className="inline-block rounded-full border-solid border-r-transparent box-border animate-spin"
+      data-testid="spinner-component"
+      className={`inline-block rounded-full border-solid border-r-transparent box-border animate-spin ${className}`}
       style={{
         width: `${size}px`,
         height: `${size}px`,

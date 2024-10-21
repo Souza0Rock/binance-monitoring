@@ -1,36 +1,67 @@
 "use client";
 
-import React from "react";
+import React, { useState, useMemo } from "react";
 import { Button, Checkbox, Input } from "@/components/common";
 import { useSymbolsData } from "@/contexts/symbolsData";
-import { useBinanceSocket } from "@/hooks/useBinanceSocket";
+import { useSymbolsCreateData } from "@/hooks/useSymbolsCreateData";
+import { TSymbolNotData } from "@/contexts/interface";
 
-export const ListAllSymbols: React.FC<{ symbols: string[] }> = ({
+export const ListAllSymbols: React.FC<{ symbols: TSymbolNotData }> = ({
   symbols,
 }) => {
-  const { stashSymbolsSelected, loadingAddSymbols } = useSymbolsData();
-  const { addSymbolInStash, addSymbolsSelected } = useBinanceSocket();
+  const { stashSymbolsSelected, loadingAddSymbols, symbolsSelectedData } =
+    useSymbolsData();
+
+  const { addSymbols, addSymbolInStash, clearSelection } = useSymbolsCreateData(
+    { blockConnect: true }
+  );
+
+  const [filterSymbolsValue, setFilterSymbolsValue] = useState("");
+
+  const filterValueLower = filterSymbolsValue.toLowerCase();
+
+  const symbolsFiltered = useMemo(() => {
+    return symbols.filter((symbol) => symbol.includes(filterValueLower));
+  }, [symbols, filterValueLower]);
 
   return (
-    <section className="max-h-[94vh] p-2 flex flex-col gap-4 bg-zinc-300 border-solid border-2 border-sky-500">
-      <Input name={""} label={"Search"} />
+    <section
+      data-testid="list-all-symbols"
+      className="h-[94vh] rounded p-2 flex flex-col gap-4 bg-zinc-300 border-solid border-2 border-zinc-400"
+    >
+      <Input label="Search" onChange={(e) => setFilterSymbolsValue(e)} />
 
-      <div className="overflow-y-auto p-2 px-3 grid gap-2 bg-zinc-200">
-        {symbols.map((symbol, index) => (
-          <Checkbox
-            key={index}
-            label={symbol}
-            id={`checkbox-${symbol}`}
-            onChange={() => addSymbolInStash(symbol)}
-            checked={stashSymbolsSelected.includes(symbol)}
-          />
-        ))}
-      </div>
+      {symbolsFiltered.length > 0 ? (
+        <div className="overflow-y-auto p-2 px-3 grid gap-2 bg-zinc-200">
+          {symbolsFiltered.map((symbol, index) => (
+            <Checkbox
+              key={index}
+              label={symbol.toUpperCase()}
+              id={`checkbox-${symbol}`}
+              onChange={() => addSymbolInStash(symbol)}
+              checked={stashSymbolsSelected.includes(symbol)}
+            />
+          ))}
+        </div>
+      ) : (
+        <h3 className="mt-4 text-2xl text-center line-break-anywhere">
+          Not found results for "{filterSymbolsValue}"
+        </h3>
+      )}
 
       <Button
-        label={"Add symbols"}
+        label="Add symbols"
+        onClick={addSymbols}
         loading={loadingAddSymbols}
-        onClick={addSymbolsSelected}
+        disabled={loadingAddSymbols || stashSymbolsSelected.length === 0}
+        className="mt-auto"
+      />
+
+      <Button
+        label="Clear all symbols"
+        onClick={clearSelection}
+        disabled={loadingAddSymbols || symbolsSelectedData.length === 0}
+        outlined
       />
     </section>
   );

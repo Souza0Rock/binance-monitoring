@@ -17,4 +17,8 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .line-break-anywhere {
+    line-break: anywhere;
+  }
 }

@@ -1,5 +1,5 @@
-import { ListAllSymbols, ListSymbolsSelected } from "@/components/Sections";
 import { fetchAllSymbols } from "@/services/fetchSymbols";
+import { ListAllSymbols, ListSymbolsSelected } from "@/components/Sections";
 
 export default async function Home() {
   const data = await fetchAllSymbols();

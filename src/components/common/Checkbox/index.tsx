@@ -4,7 +4,7 @@ export const Checkbox: React.FC<{
   id: string;
   label: string;
   checked?: boolean;
-  onChange: () => void;
+  onChange?: () => void;
 }> = ({ id, label, checked, onChange }) => {
   return (
     <div className="flex items-center">

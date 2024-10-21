@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useState } from "react";
-import { ISymbolContextValue, ISymbolData } from "./interface";
+import { ISymbolContextValue, ISymbolData, TSymbolNotData } from "./interface";
 
 export const SymbolsDataContext = createContext<ISymbolContextValue | null>(
   null
@@ -12,26 +12,40 @@ export function SymbolsDataProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const [stashSymbolsSelected, setStashSymbolsSelected] = useState<string[]>(
+  const [stashSymbolsSelected, setStashSymbolsSelected] = useState<TSymbolNotData>(
     []
   );
+
+  const [symbolsSelected, setSymbolsSelected] = useState<TSymbolNotData>([]);
 
   const [symbolsSelectedData, setSymbolsSelectedData] = useState<ISymbolData[]>(
     []
   );
 
+  const loadingForClearTable =
+    symbolsSelected.length > 0 && symbolsSelectedData.length === 0;
+
+  const loadingGetAllSymbolsSelected =
+    symbolsSelected.length !== symbolsSelectedData.length;
+
   const [loadingAddSymbols, setLoadingAddSymbols] = useState(false);
-  const toogleLoadingAddSymbols = () => setLoadingAddSymbols((prev) => !prev);
+  const enableLoadingAddSymbols = () => setLoadingAddSymbols(true);
+  const disableLoadingAddSymbols = () => setLoadingAddSymbols(false);
 
   return (
     <SymbolsDataContext.Provider
       value={{
         stashSymbolsSelected,
         setStashSymbolsSelected,
-        loadingAddSymbols,
-        toogleLoadingAddSymbols,
+        symbolsSelected,
+        setSymbolsSelected,
         symbolsSelectedData,
         setSymbolsSelectedData,
+        loadingAddSymbols,
+        disableLoadingAddSymbols,
+        enableLoadingAddSymbols,
+        loadingForClearTable,
+        loadingGetAllSymbolsSelected,
       }}
     >
       {children}

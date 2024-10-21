@@ -1,28 +1,18 @@
-import { webSocket } from "rxjs/webSocket";
 import { connectApi } from "..";
+import { TSymbolNotData } from "@/contexts/interface";
 
-export const fetchAllSymbols = async (): Promise<string[]> => {
+export const fetchAllSymbols = async (): Promise<TSymbolNotData> => {
   try {
     const {
       data: { symbols },
     } = await connectApi.get("/exchangeInfo");
 
-    const convertedData = symbols.map(
-      (item: { symbol: string }) => item.symbol
+    const convertedData = symbols.map((item: { symbol: string }) =>
+      item.symbol.toLowerCase()
     );
 
     return convertedData;
   } catch (error) {
     return [];
   }
-};
-
-export const fetchSocketSymbolsSelected = async () => {
-  const socketBaseUrl = process.env.NEXT_PUBLIC_API_BINANCE_SOCKET ?? "";
-
-
-  
-  const connectSocket = webSocket(socketBaseUrl);
-
-
 };
